@@ -11,6 +11,7 @@ final class ImagesListViewController: UIViewController {
 
     @IBOutlet
     private var tableWiew: UITableView!
+    let segueIdentifier: String = "ShowSingleImage"
     
     let photosName: [String] = Array(0..<20).map{ "\($0)" }
     private lazy var dateFormatter: DateFormatter = {
@@ -25,6 +26,23 @@ final class ImagesListViewController: UIViewController {
         super.viewDidLoad()
 
         tableWiew.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueIdentifier {
+            guard
+                let viewController = segue.destination as? SingleImageViewController,
+                let indexPath = sender as? IndexPath
+            else {
+                assertionFailure("Invalid seque destionation")
+                return
+            }
+            
+            let image = UIImage(named: photosName[indexPath.row])
+            viewController.currentImage = image
+        } else {
+            super.prepare(for: segue, sender: sender)
+        }
     }
 
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath){
@@ -41,4 +59,3 @@ final class ImagesListViewController: UIViewController {
         cell.likeButton.setImage(likeImage, for: .normal)
     }
 }
-
