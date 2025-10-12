@@ -83,7 +83,7 @@
                             <constraint firstAttribute="top" secondItem="hS6-zQ-XSb" secondAttribute="top" id="tDh-ia-iJY"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="zn5-Im-Ucg"/>
+                    <tabBarItem key="tabBarItem" title="Item" image="tab_editorial_active" id="zn5-Im-Ucg"/>
                     <navigationItem key="navigationItem" id="fS0-RH-jFR"/>
                     <connections>
                         <outlet property="tableWiew" destination="hS6-zQ-XSb" id="lBQ-YU-O1y"/>
@@ -216,10 +216,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" image="11" translatesAutoresizingMaskIntoConstraints="NO" id="ake-iK-ix4">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aFx-Vs-CjM">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pHw-JS-cr8">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" image="11" translatesAutoresizingMaskIntoConstraints="NO" id="ake-iK-ix4">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <viewLayoutGuide key="contentLayoutGuide" id="C1B-E3-7nh"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="RMz-W7-AH2"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2K1-2S-SNv" id="V9O-Xd-gQ3"/>
+                                </connections>
+                            </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aFx-Vs-CjM" userLabel="BackwardButton">
                                 <rect key="frame" x="8" y="70" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="24" id="RPU-lF-G5d"/>
@@ -231,21 +242,36 @@
                                     <action selector="didTapBackButton:" destination="2K1-2S-SNv" eventType="touchUpInside" id="GO2-8m-DyO"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lsm-s7-yqr" userLabel="ShareButton">
+                                <rect key="frame" x="171.66666666666666" y="751" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Mbe-77-RRW"/>
+                                    <constraint firstAttribute="width" constant="50" id="gUu-9x-ItI"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="ShareButton"/>
+                                <connections>
+                                    <action selector="didTapShareButton:" destination="2K1-2S-SNv" eventType="touchUpInside" id="tBQ-rk-9gQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="2Vu-q0-CnA"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="ake-iK-ix4" secondAttribute="bottom" id="5gN-GW-ocw"/>
-                            <constraint firstItem="ake-iK-ix4" firstAttribute="top" secondItem="qJ7-tB-zMB" secondAttribute="top" id="8DL-CF-tIb"/>
-                            <constraint firstItem="ake-iK-ix4" firstAttribute="leading" secondItem="qJ7-tB-zMB" secondAttribute="leading" id="AwR-w1-OvV"/>
+                            <constraint firstItem="2Vu-q0-CnA" firstAttribute="bottom" secondItem="lsm-s7-yqr" secondAttribute="bottom" constant="17" id="HNs-Jc-2fB"/>
+                            <constraint firstItem="lsm-s7-yqr" firstAttribute="centerX" secondItem="2Vu-q0-CnA" secondAttribute="centerX" id="K6D-DF-6o8"/>
                             <constraint firstItem="aFx-Vs-CjM" firstAttribute="leading" secondItem="2Vu-q0-CnA" secondAttribute="leading" constant="8" id="L4f-A8-LTD"/>
+                            <constraint firstAttribute="bottom" secondItem="pHw-JS-cr8" secondAttribute="bottom" id="PQq-YB-Wgh"/>
+                            <constraint firstItem="pHw-JS-cr8" firstAttribute="top" secondItem="qJ7-tB-zMB" secondAttribute="top" id="PbX-nl-VMZ"/>
                             <constraint firstItem="aFx-Vs-CjM" firstAttribute="top" secondItem="2Vu-q0-CnA" secondAttribute="top" constant="11" id="cTl-a5-dqc"/>
-                            <constraint firstAttribute="trailing" secondItem="ake-iK-ix4" secondAttribute="trailing" id="g5k-xB-s7F"/>
+                            <constraint firstItem="pHw-JS-cr8" firstAttribute="leading" secondItem="2Vu-q0-CnA" secondAttribute="leading" id="dP9-i3-pWW"/>
+                            <constraint firstItem="2Vu-q0-CnA" firstAttribute="trailing" secondItem="pHw-JS-cr8" secondAttribute="trailing" id="sj5-Xx-BgC"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="269-hc-81z"/>
                     <connections>
                         <outlet property="imageView" destination="ake-iK-ix4" id="SKO-rQ-zSd"/>
+                        <outlet property="scrollView" destination="pHw-JS-cr8" id="guX-V1-FgX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lla-7O-anZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -259,7 +285,9 @@
         <image name="Active" width="44" height="44"/>
         <image name="Backward" width="24" height="24"/>
         <image name="Exit" width="44" height="44"/>
+        <image name="ShareButton" width="50.5" height="50"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
