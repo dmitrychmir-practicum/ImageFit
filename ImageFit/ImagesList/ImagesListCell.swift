@@ -13,4 +13,5 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var dataLabel: UILabel!
+    @IBOutlet var effectView: UIVisualEffectView!
 }

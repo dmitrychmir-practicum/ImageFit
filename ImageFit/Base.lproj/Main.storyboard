@@ -30,8 +30,20 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="31M-PS-pyM">
                                                     <rect key="frame" x="16" y="4" width="361" height="192"/>
                                                 </imageView>
+                                                <visualEffectView opaque="NO" alpha="0.25" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TQo-Jp-uIx">
+                                                    <rect key="frame" x="16" y="166" width="361" height="30"/>
+                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="CoD-KH-uzr">
+                                                        <rect key="frame" x="0.0" y="0.0" width="361" height="30"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    </view>
+                                                    <color key="backgroundColor" name="YP Black"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="NJ9-Gr-Yrg"/>
+                                                    </constraints>
+                                                    <blurEffect style="regular"/>
+                                                </visualEffectView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hW4-4D-xYD" userLabel="Date Label">
-                                                    <rect key="frame" x="24" y="172" width="33" height="16"/>
+                                                    <rect key="frame" x="24" y="172.33333333333334" width="33" height="15.666666666666657"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -51,8 +63,11 @@
                                                 <constraint firstItem="hW4-4D-xYD" firstAttribute="leading" secondItem="31M-PS-pyM" secondAttribute="leading" constant="8" id="3Xb-Uw-enX"/>
                                                 <constraint firstItem="31M-PS-pyM" firstAttribute="bottom" secondItem="hW4-4D-xYD" secondAttribute="bottom" constant="8" id="9vS-YN-nYK"/>
                                                 <constraint firstItem="pxq-XW-8dW" firstAttribute="top" secondItem="31M-PS-pyM" secondAttribute="top" id="CHz-vM-rV7"/>
+                                                <constraint firstItem="31M-PS-pyM" firstAttribute="bottom" secondItem="TQo-Jp-uIx" secondAttribute="bottom" id="GKp-9p-6Ry"/>
+                                                <constraint firstItem="TQo-Jp-uIx" firstAttribute="leading" secondItem="31M-PS-pyM" secondAttribute="leading" id="J1D-XY-v68"/>
                                                 <constraint firstItem="31M-PS-pyM" firstAttribute="leading" secondItem="Nrw-G6-Eat" secondAttribute="leading" constant="16" id="aFF-Hc-wD4"/>
                                                 <constraint firstItem="31M-PS-pyM" firstAttribute="trailing" secondItem="pxq-XW-8dW" secondAttribute="trailing" id="dIG-Da-RRZ"/>
+                                                <constraint firstItem="31M-PS-pyM" firstAttribute="trailing" secondItem="TQo-Jp-uIx" secondAttribute="trailing" id="ifx-iv-D33"/>
                                                 <constraint firstAttribute="trailing" secondItem="31M-PS-pyM" secondAttribute="trailing" constant="16" id="jAc-Xa-X27"/>
                                                 <constraint firstItem="31M-PS-pyM" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hW4-4D-xYD" secondAttribute="trailing" constant="8" id="mxE-wD-hP0"/>
                                                 <constraint firstAttribute="bottom" secondItem="31M-PS-pyM" secondAttribute="bottom" constant="4" id="nPm-yY-mLY"/>
@@ -64,6 +79,7 @@
                                         <connections>
                                             <outlet property="cellImage" destination="31M-PS-pyM" id="fPF-uQ-JmE"/>
                                             <outlet property="dataLabel" destination="hW4-4D-xYD" id="dGS-Y7-Zkc"/>
+                                            <outlet property="effectView" destination="TQo-Jp-uIx" id="vZw-re-uhD"/>
                                             <outlet property="likeButton" destination="pxq-XW-8dW" id="Kpa-Wg-Kbb"/>
                                         </connections>
                                     </tableViewCell>
@@ -83,7 +99,7 @@
                             <constraint firstAttribute="top" secondItem="hS6-zQ-XSb" secondAttribute="top" id="tDh-ia-iJY"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" image="tab_editorial_active" id="zn5-Im-Ucg"/>
+                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="zn5-Im-Ucg"/>
                     <navigationItem key="navigationItem" id="fS0-RH-jFR"/>
                     <connections>
                         <outlet property="tableWiew" destination="hS6-zQ-XSb" id="lBQ-YU-O1y"/>
@@ -193,11 +209,8 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" name="YP Black"/>
                         <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <tabBarAppearance key="standardAppearance">
-                            <color key="backgroundColor" name="YP Black"/>
-                            <color key="selectionIndicatorTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </tabBarAppearance>
                     </tabBar>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="5Nl-Aj-VSL"/>
@@ -237,7 +250,7 @@
                                     <constraint firstAttribute="height" constant="24" id="pwj-Ja-R7c"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="Backward"/>
+                                <buttonConfiguration key="configuration" style="plain" image="BackwardButton"/>
                                 <connections>
                                     <action selector="didTapBackButton:" destination="2K1-2S-SNv" eventType="touchUpInside" id="GO2-8m-DyO"/>
                                 </connections>
@@ -283,9 +296,9 @@
         <image name="0" width="1600" height="1059"/>
         <image name="11" width="853" height="1280"/>
         <image name="Active" width="44" height="44"/>
-        <image name="Backward" width="24" height="24"/>
+        <image name="BackwardButton" width="24" height="24"/>
         <image name="Exit" width="44" height="44"/>
-        <image name="ShareButton" width="50.5" height="50"/>
+        <image name="ShareButton" width="50.333332061767578" height="50"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>

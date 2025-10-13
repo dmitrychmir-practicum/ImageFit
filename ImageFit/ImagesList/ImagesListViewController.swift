@@ -47,15 +47,23 @@ final class ImagesListViewController: UIViewController {
 
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath){
         guard let image = UIImage(named: photosName[indexPath.row]) else { return }
-
         cell.dataLabel.text = dateFormatter.string(from: Date())
         cell.cellImage.image = image
         cell.cellImage.layer.cornerRadius = 16
         cell.cellImage.layer.masksToBounds = true
-        
         let isActive = indexPath.row % 2 == 0
         let likeImage = isActive ? UIImage(named: "Active") : UIImage(named: "NoActive")
-        
         cell.likeButton.setImage(likeImage, for: .normal)
+        roundingSubstrateCorners(cell)
+    }
+    
+    private func roundingSubstrateCorners(_ cell: ImagesListCell) {
+        let corners = UIRectCorner(arrayLiteral: [.bottomLeft, .bottomRight])
+        let maskPath = UIBezierPath(roundedRect: cell.effectView.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: 16, height: 16))
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = cell.effectView.bounds
+        maskLayer.path = maskPath.cgPath
+        cell.effectView.layer.mask = maskLayer
+        
     }
 }
