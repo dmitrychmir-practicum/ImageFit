@@ -18,7 +18,7 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initAvatarImage(withName: "Avatar")
+        initAvatarImage(withName: "avatar")
         initLogoutButton()
         initFullName(withFullName: "Екатерина Новикова")
         initAccountName(withAccount: "@ekaterina_nov")
