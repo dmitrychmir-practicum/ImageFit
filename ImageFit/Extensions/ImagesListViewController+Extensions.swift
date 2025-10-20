@@ -20,13 +20,14 @@ extension ImagesListViewController:  UITableViewDataSource{
         }
         
         configCell(for: imagesListCell, with: indexPath)
+        
         return imagesListCell
     }
 }
 
 extension ImagesListViewController: UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        performSegue(withIdentifier: segueIdentifier, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
