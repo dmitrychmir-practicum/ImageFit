@@ -6,22 +6,26 @@
 //
 
 import UIKit
+import ProgressHUD
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         navigationController?.popViewController(animated: true)
+        ProgressHUD.animate()
         
-        OAuth2Service.shared.fetchAuthToken(withCode: code) { [weak self] result in
+        oauth2Service.fetchAuthToken(withCode: code) { [weak self] result in
             DispatchQueue.main.async {
+                ProgressHUD.dismiss()
+                
+                guard let self else { return }
+                
                 switch result {
-                case .success(let token):
-                    self?.authStorage.token = token
-                    self?.logger.insertLog("Токен сохранён.")
-                    if let self {
+                    case .success(let token):
+                        self.authStorage.token = token
+                        self.logger.insertLog("Токен сохранён.")
                         self.delegate?.didAuthenticate(self)
-                    }
-                case .failure(let error):
-                    self?.logger.insertLog(error.localizedDescription)
+                    case .failure(let error):
+                        self.logger.insertLog(error.localizedDescription)
                 }
             }
         }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		64B1FA052EB0C78600AA4679 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B1FA042EB0C78600AA4679 /* WebKit.framework */; };
+		64FDFE152EB2847200FAE5F0 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 64FDFE142EB2847200FAE5F0 /* ProgressHUD */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				64B1FA052EB0C78600AA4679 /* WebKit.framework in Frameworks */,
+				64FDFE152EB2847200FAE5F0 /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +95,7 @@
 			);
 			name = ImageFit;
 			packageProductDependencies = (
+				64FDFE142EB2847200FAE5F0 /* ProgressHUD */,
 			);
 			productName = ImageFit;
 			productReference = 642566812E911E9100744B19 /* ImageFit.app */;
@@ -122,6 +125,9 @@
 			);
 			mainGroup = 642566782E911E9100744B19;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				64FDFE132EB2847200FAE5F0 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 642566822E911E9100744B19 /* Products */;
 			projectDirPath = "";
@@ -374,6 +380,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		64FDFE132EB2847200FAE5F0 /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/relatedcode/ProgressHUD";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 14.1.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		64FDFE142EB2847200FAE5F0 /* ProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 64FDFE132EB2847200FAE5F0 /* XCRemoteSwiftPackageReference "ProgressHUD" */;
+			productName = ProgressHUD;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 642566792E911E9100744B19 /* Project object */;
 }
