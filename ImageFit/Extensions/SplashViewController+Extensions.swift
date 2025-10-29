@@ -12,7 +12,8 @@ extension SplashViewController: AuthViewControllerDelegate {
         if segue.identifier == showAuthViewIdentifier {
             guard let navController = segue.destination as? UINavigationController, let viewController = navController.viewControllers[0] as? AuthViewController
             else {
-                fatalError("Не удалось создать окно для \(showAuthViewIdentifier)")
+                assertionFailure("Не удалось создать окно для \(showAuthViewIdentifier)")
+                return
             }
             viewController.delegate = self
         } else {

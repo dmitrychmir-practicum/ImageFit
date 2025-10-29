@@ -11,9 +11,6 @@ final class SplashViewController: UIViewController {
     let showAuthViewIdentifier = "showAuthView"
     private let storage = OAuth2TokenStorage()
     
-    private var logoImage: UIImage?
-    private var logoImageView: UIImageView!
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -31,15 +28,16 @@ final class SplashViewController: UIViewController {
     
     private func initView() {
         view.backgroundColor = .ypBlack
-        logoImage = UIImage(named: "SplashScreenLogo")
-        logoImageView = UIImageView(image: logoImage)
+        let logoImage = UIImage(resource: .splashScreenLogo)
+        let logoImageView = UIImageView(image: logoImage)
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoImageView)
-        
+            
         NSLayoutConstraint.activate([
             logoImageView.centerXAnchor.constraint(equalTo:  view.safeAreaLayoutGuide.centerXAnchor, constant: 0),
             logoImageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: 0),
         ])
+        
     }
     
     func switchToTabBarController() {

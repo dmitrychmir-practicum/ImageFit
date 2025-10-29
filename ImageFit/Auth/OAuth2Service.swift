@@ -11,8 +11,35 @@ final class OAuth2Service {
     private let logger = Logger.shared
     static let shared = OAuth2Service()
     private let networkClient = NetworkClient()
+    private let decoder = JSONDecoder()
     
-    private init() {}
+    private init() {
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+    }
+    
+    func fetchAuthToken(withCode code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        guard let request = createOAuthTokenRequest(withCode: code) else {
+            completion(.failure(NetworkError.invalidRequest))
+            return
+        }
+        
+        networkClient.fetchData(request: request) { result in
+            switch result {
+            case .success(let data):
+                do {
+                    let jsonData = try self.decoder.decode(OAuthTokenResponseBody.self, from: data)
+                    completion(.success(jsonData.accessToken))
+                } catch {
+                    self.logger.insertLog(error)
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                self.logger.insertLog(error)
+                completion(.failure(error))
+            }
+        
+        }
+    }
     
     private func createOAuthTokenRequest(withCode code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
@@ -34,34 +61,8 @@ final class OAuth2Service {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = HTTPMethod.post.rawValue
         
         return request
-    }
-    
-    func fetchAuthToken(withCode code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        guard let request = createOAuthTokenRequest(withCode: code) else {
-            completion(.failure(NetworkError.invalidRequest))
-            return
-        }
-        
-        networkClient.fetchData(request: request) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let jsonData = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(jsonData.accessToken))
-                } catch {
-                    self.logger.insertLog(error)
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                self.logger.insertLog(error)
-                completion(.failure(error))
-            }
-        
-        }
     }
 }
