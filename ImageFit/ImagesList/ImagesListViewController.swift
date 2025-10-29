@@ -52,7 +52,7 @@ final class ImagesListViewController: UIViewController {
         cell.cellImage.layer.cornerRadius = 16
         cell.cellImage.layer.masksToBounds = true
         let isActive = indexPath.row % 2 == 0
-        let likeImage = isActive ? UIImage(named: "Active") : UIImage(named: "NoActive")
+        let likeImage = isActive ? UIImage(resource: .active) : UIImage(resource: .noActive)
         cell.likeButton.setImage(likeImage, for: .normal)
     }
 }
