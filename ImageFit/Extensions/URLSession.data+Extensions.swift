@@ -44,14 +44,14 @@ extension URLSession {
                     completion(.success(decodedObject))
                 } catch {
                     if let decodingError = error as? DecodingError {
-                        Logger.shared.insertLog("Ошибка декодирования: \(decodingError), Данные: \(String(data: data, encoding: .utf8) ?? "")")
+                        Logger.shared.insertLog("[URLSession.objectTask]: Ошибка декодирования: \(decodingError), Данные: \(String(data: data, encoding: .utf8) ?? "")")
                     } else {
-                        Logger.shared.insertLog("Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
+                        Logger.shared.insertLog("[URLSession.objectTask]: Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
                     }
                     completion(.failure(error))
                 }
             case .failure(let error):
-                Logger.shared.insertLog("Ошибка запроса: \(error.localizedDescription)")
+                Logger.shared.insertLog("[URLSession.objectTask]: Ошибка запроса: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }

@@ -8,19 +8,6 @@
 import UIKit
 
 extension SplashViewController: AuthViewControllerDelegate {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showAuthViewIdentifier {
-            guard let navController = segue.destination as? UINavigationController, let viewController = navController.viewControllers[0] as? AuthViewController
-            else {
-                assertionFailure("Не удалось создать окно для \(showAuthViewIdentifier)")
-                return
-            }
-            viewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
-    
     func didAuthenticate(_ viewController: AuthViewController) {
         navigationController?.popViewController(animated: true)
         
@@ -29,7 +16,6 @@ extension SplashViewController: AuthViewControllerDelegate {
         }
         
         fetchProfile(withToken: token)
-        //switchToTabBarController()
     }
     
     internal func fetchProfile(withToken token: String) {
@@ -40,7 +26,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .success:
                 self?.switchToTabBarController()
             case .failure(let error):
-                //TODO: Показать ошибку загрузки профиля
+                self?.logger.insertLog("[SplashViewController.fetchProfile]: Ошибка запроса: \(error.localizedDescription)")
                 break
             }
         }

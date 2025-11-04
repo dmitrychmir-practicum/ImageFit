@@ -24,7 +24,7 @@ final class ProfileViewController: UIViewController {
         initAvatarImage(withName: "no_avatar")
         initLogoutButton()
         initFullName(withFullName: profileDetails?.fullName)
-        initAccountName(withAccount: profileDetails?.username)
+        initAccountName(withAccount: profileDetails?.loginName)
         initHelloWorld(withBio: profileDetails?.bio)
         
         profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) { [weak self] _ in

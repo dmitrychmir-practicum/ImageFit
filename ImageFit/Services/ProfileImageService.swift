@@ -10,7 +10,6 @@ import UIKit
 final class ProfileImageService: BaseService {
     static let shared = ProfileImageService()
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
-    private let networkClient = NetworkClient()
     private(set) var avatarURL: String?
     
     private override init() {}
@@ -22,7 +21,7 @@ final class ProfileImageService: BaseService {
         guard let token = storage.token,
               let request = createGetUserRequest(withToken: token, user: username) else {
             logger.insertLog("Не удалось создать запрос профиля")
-            completion(.failure(ProfileServiceError.failedToFetchProfileInfo))
+            completion(.failure(NSError(domain: "ProfileImageService", code: 401, userInfo: [NSLocalizedDescriptionKey: "Authorization token missing"])))
             return
         }
         
@@ -30,12 +29,14 @@ final class ProfileImageService: BaseService {
             guard let self else { return }
             switch result {
             case .success(let result):
+                //Маленькие картинки смотрятся не очень хорошо, решил что лучше загрузить большие.
+                //TODO: Думаю надо будет доработать, и в зависимости от разрешения экрана (x2 или x3) брать нужную картинку (medium или large)
                 self.avatarURL = result.profileImage.large
                 completion(.success(result.profileImage.large))
                 
                 NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": self.avatarURL ?? ""])
                 case .failure(let error):
-                self.logger.insertLog(error)
+                self.logger.insertLog("[ProfileImageService.fetchProfileImageURL]: Ошибка запроса: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
@@ -47,7 +48,6 @@ final class ProfileImageService: BaseService {
     private func createGetUserRequest(withToken token: String, user: String) -> URLRequest? {
         guard let urlComponents = URLComponents(string: UnsplashProfileURL.user(username: user).url),
               let url = urlComponents.url else {
-            logger.insertLog("Ошибка: не удалось создать URL запроса личной информации")
             return nil
         }
         

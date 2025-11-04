@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//TODO: Ссылок на структуру у нас не осталось, возможно стоит удалить
 struct NetworkClient: NetworkRoutingProtocol {
     private let logger = Logger.shared
     private let session: URLSession
@@ -17,7 +17,6 @@ struct NetworkClient: NetworkRoutingProtocol {
 
     func fetchData(request: URLRequest, handler: @escaping (Result<Data, Error>) -> Void) {
         let task = fetchDataTask(request: request, handler: handler)
-        
         task.resume()
     }
     

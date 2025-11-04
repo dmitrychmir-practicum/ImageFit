@@ -9,7 +9,6 @@ import UIKit
 
 final class ProfileService: BaseService {
     static let shared = ProfileService()
-    private let networkClient = NetworkClient()
     private let profileImageService = ProfileImageService.shared
     private(set) var profile: ProfileModel?
     
@@ -19,9 +18,7 @@ final class ProfileService: BaseService {
         assert(Thread.isMainThread)
         task?.cancel()
         
-        guard let token = storage.token,
-              let request = createGetMeRequest(withToken: token) else {
-            logger.insertLog("Не удалось создать запрос профиля")
+        guard let request = createGetMeRequest(withToken: token) else {
             completion(.failure(ProfileServiceError.failedToFetchProfileInfo))
             return
         }
@@ -35,7 +32,7 @@ final class ProfileService: BaseService {
                     self?.profile = profile
                     completion(.success(profile))
                 case .failure(let error):
-                    self?.logger.insertLog(error)
+                    self?.logger.insertLog("[ProfileService.fetchProfile]: Ошибка запроса: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
             }
@@ -48,7 +45,6 @@ final class ProfileService: BaseService {
     private func createGetMeRequest(withToken token: String) -> URLRequest? {
         guard let urlComponents = URLComponents(string: UnsplashProfileURL.me.url),
               let url = urlComponents.url else {
-            logger.insertLog("Ошибка: не удалось создать URL запроса личной информации")
             return nil
         }
         

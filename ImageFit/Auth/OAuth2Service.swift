@@ -9,7 +9,6 @@ import UIKit
 
 final class OAuth2Service : BaseService {
     static let shared = OAuth2Service()
-    private let networkClient = NetworkClient()
     private var lastCode: String?
     
     private override init() {}
@@ -24,7 +23,6 @@ final class OAuth2Service : BaseService {
         lastCode = code
         
         guard let request = createOAuthTokenRequest(withCode: code) else {
-            logger.insertLog("Failed to create OAuth token request")
             completion(.failure(AuthServiceError.invalidRequest))
             return
         }
@@ -40,7 +38,7 @@ final class OAuth2Service : BaseService {
                     self.storage.token = authToken
                     completion(.success(authToken))
                 case .failure(let error):
-                    self.logger.insertLog(error)
+                    self.logger.insertLog("[OAuth2Service.fetchAuthToken]: Ошибка запроса: \(error.localizedDescription)")
                     completion(.failure(error))
                 }
                 self.task = nil
@@ -54,7 +52,7 @@ final class OAuth2Service : BaseService {
     
     private func createOAuthTokenRequest(withCode code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
-            logger.insertLog("Ошибка: не удалось создать URL")
+            logger.insertLog("[OAuth2Service.createOAuthTokenRequest]: Ошибка: не удалось создать URL")
             return nil
         }
         
@@ -67,7 +65,6 @@ final class OAuth2Service : BaseService {
         ]
         
         guard let url = urlComponents.url else {
-            logger.insertLog("Ошибка: не удалось создать URL")
             return nil
         }
         

@@ -20,10 +20,9 @@ extension AuthViewController: WebViewViewControllerDelegate {
             switch result {
             case .success(let token):
                 self.authStorage.token = token
-                self.logger.insertLog("Токен сохранён.")
                 self.delegate?.didAuthenticate(self)
             case .failure(let error):
-                self.logger.insertLog(error.localizedDescription)
+                self.logger.insertLog("[AuthViewController.webViewViewController]: Ошибка при аутентификации: \(error.localizedDescription)")
                 self.showAuthErrorAlert()
             }
             UIBlockingProgressHUD.dismiss()
