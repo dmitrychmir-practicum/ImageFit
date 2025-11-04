@@ -9,13 +9,15 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     let showAuthViewIdentifier = "showAuthView"
-    private let storage = OAuth2TokenStorage()
-    
+    let profileService = ProfileService.shared
+    let storage = OAuth2TokenStorage()
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if storage.token != nil {
-            switchToTabBarController()
+        if let token = storage.token {
+            //switchToTabBarController()
+            fetchProfile(withToken: token)
         } else {
             performSegue(withIdentifier: showAuthViewIdentifier, sender: nil)
         }

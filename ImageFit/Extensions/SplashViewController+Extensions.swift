@@ -23,6 +23,26 @@ extension SplashViewController: AuthViewControllerDelegate {
     
     func didAuthenticate(_ viewController: AuthViewController) {
         navigationController?.popViewController(animated: true)
-        switchToTabBarController()
+        
+        guard let token = storage.token else {
+            return
+        }
+        
+        fetchProfile(withToken: token)
+        //switchToTabBarController()
+    }
+    
+    internal func fetchProfile(withToken token: String) {
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile(token: token) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            switch result {
+            case .success:
+                self?.switchToTabBarController()
+            case .failure(let error):
+                //TODO: Показать ошибку загрузки профиля
+                break
+            }
+        }
     }
 }

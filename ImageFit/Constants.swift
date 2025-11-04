@@ -18,3 +18,17 @@ enum Constants {
 enum WebViewConstants {
     static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
 }
+
+enum UnsplashProfileURL {
+    case me
+    case user(username: String)
+    
+    var url: String {
+        switch self {
+        case .me:
+            return "https://api.unsplash.com/me"
+        case .user(let username):
+            return "https://api.unsplash.com/users/\(username)"
+        }
+    }
+}

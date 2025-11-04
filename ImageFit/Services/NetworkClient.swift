@@ -14,8 +14,14 @@ struct NetworkClient: NetworkRoutingProtocol {
     init(session: URLSession = .shared) {
         self.session = session
     }
-    
+
     func fetchData(request: URLRequest, handler: @escaping (Result<Data, Error>) -> Void) {
+        let task = fetchDataTask(request: request, handler: handler)
+        
+        task.resume()
+    }
+    
+    func fetchDataTask(request: URLRequest, handler: @escaping (Result<Data, Error>) -> Void) -> URLSessionDataTask {
         let fulfillHandlerOnTheMainThread: (Result<Data, Error>) -> Void = { result in
             DispatchQueue.main.async {
                 handler(result)
@@ -35,8 +41,15 @@ struct NetworkClient: NetworkRoutingProtocol {
                 fulfillHandlerOnTheMainThread(.failure(respErr))
                 return
             }
-            
+
             guard (200..<300).contains(resp.statusCode) else {
+                if resp.statusCode == 404 {
+                    let statErr = NetworkError.httpStatusCode(resp.statusCode)
+                    logger.insertLog("Контент не найден")
+                    fulfillHandlerOnTheMainThread(.failure(statErr))
+                    return
+                }
+                
                 let statErr = NetworkError.httpStatusCode(resp.statusCode)
                 logger.insertLog(statErr)
                 fulfillHandlerOnTheMainThread(.failure(statErr))
@@ -53,6 +66,6 @@ struct NetworkClient: NetworkRoutingProtocol {
             fulfillHandlerOnTheMainThread(.success(data))
         }
         
-        task.resume()
+        return task
     }
 }

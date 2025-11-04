@@ -7,38 +7,49 @@
 
 import UIKit
 
-final class OAuth2Service {
-    private let logger = Logger.shared
+final class OAuth2Service : BaseService {
     static let shared = OAuth2Service()
     private let networkClient = NetworkClient()
-    private let decoder = JSONDecoder()
+    private var lastCode: String?
     
-    private init() {
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-    }
+    private override init() {}
     
     func fetchAuthToken(withCode code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        guard let request = createOAuthTokenRequest(withCode: code) else {
+        assert(Thread.isMainThread)
+        if lastCode != code {
             completion(.failure(NetworkError.invalidRequest))
-            return
         }
         
-        networkClient.fetchData(request: request) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let jsonData = try self.decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(jsonData.accessToken))
-                } catch {
+        task?.cancel()
+        lastCode = code
+        
+        guard let request = createOAuthTokenRequest(withCode: code) else {
+            logger.insertLog("Failed to create OAuth token request")
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+
+        let task = urlSession.objectTask(for: request) {[weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            DispatchQueue.main.async {
+                UIBlockingProgressHUD.dismiss()
+                guard let self else { return }
+                
+                switch result {
+                case .success(let body):
+                    let authToken = body.accessToken
+                    self.storage.token = authToken
+                    completion(.success(authToken))
+                case .failure(let error):
                     self.logger.insertLog(error)
                     completion(.failure(error))
                 }
-            case .failure(let error):
-                self.logger.insertLog(error)
-                completion(.failure(error))
+                self.task = nil
+                self.lastCode = nil
             }
-        
         }
+        
+        self.task = task
+        task.resume()
     }
     
     private func createOAuthTokenRequest(withCode code: String) -> URLRequest? {

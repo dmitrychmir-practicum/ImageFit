@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -15,14 +16,29 @@ final class ProfileViewController: UIViewController {
     private var accountLabel: UILabel!
     private var helloWorldLabel: UILabel!
     private var logoutButton: UIButton!
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initAvatarImage(withName: "avatar")
+        let profileDetails = ProfileService.shared.profile
+        initAvatarImage(withName: "no_avatar")
         initLogoutButton()
-        initFullName(withFullName: "Екатерина Новикова")
-        initAccountName(withAccount: "@ekaterina_nov")
-        initHelloWorld()
+        initFullName(withFullName: profileDetails?.fullName)
+        initAccountName(withAccount: profileDetails?.username)
+        initHelloWorld(withBio: profileDetails?.bio)
+        
+        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            guard let self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
+    }
+    
+    private func updateAvatar() {
+        guard let profileImageUrl = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageUrl) else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 50)
+        
+        avatarImageView.kf.setImage(with: url, placeholder: avatarImage, options: [.processor(processor)])
     }
     
     private func initAvatarImage(withName imageName: String) {
@@ -112,9 +128,9 @@ final class ProfileViewController: UIViewController {
         accountLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
     }
 
-    private func initHelloWorld() {
+    private func initHelloWorld(withBio description: String?) {
         helloWorldLabel = UILabel()
-        helloWorldLabel.text = "Hello, world!"
+        helloWorldLabel.text = description ?? "Hello, world!"
         
         helloWorldLabel.textColor = .white
         helloWorldLabel.translatesAutoresizingMaskIntoConstraints = false
