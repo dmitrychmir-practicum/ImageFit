@@ -32,3 +32,22 @@ enum UnsplashProfileURL {
         }
     }
 }
+
+enum AuthErrorAlertConstants {
+    static let title = "Что-то пошло не так"
+    static let message = "Не удалось войти в систему"
+}
+
+enum ErrorMessages {
+    case requestError(method: String, error: Error)
+    case urlError(method: String)
+    
+    var description: String {
+        switch self {
+        case .requestError(let method, let error):
+            return "[\(method)]: Ошибка запроса: \(error.localizedDescription)"
+        case .urlError(let method):
+            return "[\(method)]: Ошибка: не удалось создать URL"
+        }
+    }
+}

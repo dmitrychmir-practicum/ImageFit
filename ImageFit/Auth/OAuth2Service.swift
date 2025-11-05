@@ -38,7 +38,7 @@ final class OAuth2Service : BaseService {
                     self.storage.token = authToken
                     completion(.success(authToken))
                 case .failure(let error):
-                    self.logger.insertLog("[OAuth2Service.fetchAuthToken]: Ошибка запроса: \(error.localizedDescription)")
+                    self.logger.insertLog(ErrorMessages.requestError(method: "OAuth2Service.fetchAuthToken", error: error).description)
                     completion(.failure(error))
                 }
                 self.task = nil
@@ -52,7 +52,8 @@ final class OAuth2Service : BaseService {
     
     private func createOAuthTokenRequest(withCode code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
-            logger.insertLog("[OAuth2Service.createOAuthTokenRequest]: Ошибка: не удалось создать URL")
+            logger.insertLog(ErrorMessages.urlError(method: "OAuth2Service.createOAuthTokenRequest").description)
+            
             return nil
         }
         

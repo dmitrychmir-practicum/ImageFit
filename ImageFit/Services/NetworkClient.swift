@@ -10,6 +10,8 @@ import Foundation
 struct NetworkClient: NetworkRoutingProtocol {
     private let logger = Logger.shared
     private let session: URLSession
+    private let allowHttpStatuses = (200..<300)
+    private let contentNotFound = 404
     
     init(session: URLSession = .shared) {
         self.session = session
@@ -41,8 +43,8 @@ struct NetworkClient: NetworkRoutingProtocol {
                 return
             }
 
-            guard (200..<300).contains(resp.statusCode) else {
-                if resp.statusCode == 404 {
+            guard allowHttpStatuses.contains(resp.statusCode) else {
+                if resp.statusCode == contentNotFound {
                     let statErr = NetworkError.httpStatusCode(resp.statusCode)
                     logger.insertLog("Контент не найден")
                     fulfillHandlerOnTheMainThread(.failure(statErr))
