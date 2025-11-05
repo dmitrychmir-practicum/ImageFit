@@ -9,15 +9,26 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     let showAuthViewIdentifier = "showAuthView"
-    private let storage = OAuth2TokenStorage()
-    
+    let profileService = ProfileService.shared
+    let storage = OAuth2TokenStorage()
+    let logger = Logger.shared
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if storage.token != nil {
-            switchToTabBarController()
+        if let token = storage.token {
+            fetchProfile(withToken: token)
         } else {
-            performSegue(withIdentifier: showAuthViewIdentifier, sender: nil)
+            let storyboard = UIStoryboard(name: "Main", bundle: .main)
+            
+            guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
+                logger.insertLog("AuthViewController not found")
+                return
+            }
+            authViewController.delegate = self
+            authViewController.modalPresentationStyle = .fullScreen
+            present(authViewController, animated: true)
+            
         }
     }
     

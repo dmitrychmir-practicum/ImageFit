@@ -8,7 +8,7 @@
 import UIKit
 
 final class AuthViewController: UIViewController {
-    private let oauth2Service = OAuth2Service.shared
+    let oauth2Service = OAuth2Service.shared
     private let showWebViewIdentifier = "showWebView"
     let authStorage = OAuth2TokenStorage()
     let logger = Logger.shared

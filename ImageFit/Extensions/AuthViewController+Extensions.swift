@@ -6,30 +6,39 @@
 //
 
 import UIKit
+import ProgressHUD
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         navigationController?.popViewController(animated: true)
+        UIBlockingProgressHUD.show()
         
-        OAuth2Service.shared.fetchAuthToken(withCode: code) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let token):
-                    self?.authStorage.token = token
-                    self?.logger.insertLog("Токен сохранён.")
-                    if let self {
-                        self.delegate?.didAuthenticate(self)
-                    }
-                case .failure(let error):
-                    self?.logger.insertLog(error.localizedDescription)
-                }
+        oauth2Service.fetchAuthToken(withCode: code) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self else { return }
+            
+            switch result {
+            case .success(let token):
+                self.authStorage.token = token
+                self.delegate?.didAuthenticate(self)
+            case .failure(let error):
+                self.logger.insertLog("[AuthViewController.webViewViewController]: Ошибка при аутентификации: \(error.localizedDescription)")
+                self.showAuthErrorAlert()
             }
+            UIBlockingProgressHUD.dismiss()
         }
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         vc.dismiss(animated: true)
     }
-    
-    
+}
+
+extension AuthViewController {
+    func showAuthErrorAlert() {
+        let alertController = UIAlertController(title: AuthErrorAlertConstants.title, message: AuthErrorAlertConstants.message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
 }
