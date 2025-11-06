@@ -9,6 +9,7 @@ import UIKit
 
 final class ImagesListViewController: UIViewController {
 
+    let imagesListService = ImagesListService.shared
     @IBOutlet
     private var tableWiew: UITableView!
     let segueIdentifier: String = "ShowSingleImage"

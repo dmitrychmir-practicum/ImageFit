@@ -7,7 +7,8 @@
 
 import UIKit
 
-extension ImagesListViewController:  UITableViewDataSource{
+extension ImagesListViewController:  UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photosName.count
     }
@@ -23,9 +24,17 @@ extension ImagesListViewController:  UITableViewDataSource{
         
         return imagesListCell
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // TODO: тут запросим следующую страницу
+        if indexPath.row + 1 == imagesListService.photos.count {
+            imagesListService.fetchPhotosNextPage() { result in
+            }
+        }
+    }
 }
 
-extension ImagesListViewController: UITableViewDelegate{
+extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: segueIdentifier, sender: indexPath)
     }

@@ -12,7 +12,8 @@ extension ProfileResult {
         let model = ProfileModel(
             username: username,
             fullName: "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces),
-            loginName: "@\(username)", bio: bio)
+            loginName: "@\(username)",
+            bio: bio)
         return model
     }
 }

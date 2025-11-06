@@ -33,6 +33,17 @@ enum UnsplashProfileURL {
     }
 }
 
+enum ImagesDownloaderConstants {
+    case page(page: Int, pageSize: Int)
+    
+    var url: String {
+        switch self {
+            case .page(page: let page, pageSize: let pageSize):
+            return "https://api.unsplash.com/photos?page=\(page)&per_page=\(pageSize)"
+        }
+    }
+}
+
 enum AuthErrorAlertConstants {
     static let title = "Что-то пошло не так"
     static let message = "Не удалось войти в систему"

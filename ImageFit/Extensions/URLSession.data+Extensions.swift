@@ -58,4 +58,29 @@ extension URLSession {
         
         return task
     }
+    
+    func objectTask(for request: URLRequest, completion: @escaping (Result<[PhotoResult], Error>) -> Void) -> URLSessionTask {
+        URLSession.decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let task = data(for: request) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                do {
+                    let decodedObject = try URLSession.decoder.decode([PhotoResult].self, from: data)
+                    completion(.success(decodedObject))
+                } catch {
+                    if let decodingError = error as? DecodingError {
+                        Logger.shared.insertLog("[URLSession.objectTask]: Ошибка декодирования: \(decodingError), Данные: \(String(data: data, encoding: .utf8) ?? "")")
+                    } else {
+                        Logger.shared.insertLog("[URLSession.objectTask]: Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
+                    }
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                Logger.shared.insertLog("[URLSession.objectTask]: Ошибка запроса: \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
+        
+        return task
+    }
 }
