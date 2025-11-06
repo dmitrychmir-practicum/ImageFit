@@ -40,11 +40,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		641194FA2EBCD40300AF8E64 /* ImageFitTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ImageFitTests;
-			sourceTree = "<group>";
-		};
 		642566832E911E9100744B19 /* ImageFit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -81,7 +76,6 @@
 			isa = PBXGroup;
 			children = (
 				642566832E911E9100744B19 /* ImageFit */,
-				641194FA2EBCD40300AF8E64 /* ImageFitTests */,
 				64B1FA032EB0C78600AA4679 /* Frameworks */,
 				642566822E911E9100744B19 /* Products */,
 			);
@@ -119,9 +113,6 @@
 			);
 			dependencies = (
 				641194FE2EBCD40300AF8E64 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				641194FA2EBCD40300AF8E64 /* ImageFitTests */,
 			);
 			name = ImageFitTests;
 			packageProductDependencies = (
