@@ -12,6 +12,10 @@ final class Logger {
     
     private init() {}
     
+    func insertLog(_ message: ErrorMessages) {
+        print("ImageFit LOG: \(message.description)")
+    }
+    
     func insertLog(_ message: String) {
         print("ImageFit LOG: \(message)")
         

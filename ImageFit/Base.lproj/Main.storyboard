@@ -145,7 +145,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pHw-JS-cr8">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" image="11" translatesAutoresizingMaskIntoConstraints="NO" id="ake-iK-ix4">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" image="stub" translatesAutoresizingMaskIntoConstraints="NO" id="ake-iK-ix4">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
@@ -316,11 +316,11 @@
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
-        <image name="11" width="853" height="1280"/>
         <image name="Active" width="44" height="44"/>
         <image name="AuthIcon" width="60" height="60"/>
         <image name="BackwardButton" width="24" height="24"/>
         <image name="ShareButton" width="50.333332061767578" height="50"/>
+        <image name="stub" width="83" height="75"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

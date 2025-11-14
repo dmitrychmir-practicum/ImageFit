@@ -29,7 +29,6 @@ final class SplashViewController: UIViewController {
             authViewController.delegate = self
             authViewController.modalPresentationStyle = .fullScreen
             present(authViewController, animated: true)
-            
         }
     }
     

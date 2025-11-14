@@ -48,6 +48,7 @@ extension ImagesListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == photos.count {
+            UIBlockingProgressHUD.show()
             imagesListService.fetchPhotosNextPage() { _ in }
         }
     }
@@ -72,12 +73,12 @@ extension ImagesListViewController: ImagesListCellDelegate {
             case .success:
                 self.photos[indexRow].isLiked = !self.photos[indexRow].isLiked
                 cell.setLikeButtonImage(self.photos[indexRow].isLiked)
-                
             case .failure(let error):
-                self.logger.insertLog("Не удалось сменить статус изображения: \(error)")
-                self.showErrorLoadImageAlert(title: "Ошибка", message: "Что-то пошло не так. Попробовать ещё раз?", handler: { [weak self] in
-                    self?.changeLike(photoModel: photoModel, cell: cell, indexRow: indexRow)
-                })
+                self.logger.insertLog(.changeLikeStatusError(method: "ImagesListViewController.changeLike", error: error))
+                let alert = Alert.yesNoAlert(title: AnyErrorAlertConstants.title, message: AnyErrorAlertConstants.message, style: .alert, completionYes: {
+                    self.changeLike(photoModel: photoModel, cell: cell, indexRow: indexRow)
+                }, completionNo: nil)
+                present(alert.controller, animated: true)
             }
         }
     }

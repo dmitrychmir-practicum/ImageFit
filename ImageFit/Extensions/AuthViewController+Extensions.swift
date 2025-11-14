@@ -22,7 +22,7 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 self.authStorage.token = token
                 self.delegate?.didAuthenticate(self)
             case .failure(let error):
-                self.logger.insertLog("[AuthViewController.webViewViewController]: Ошибка при аутентификации: \(error.localizedDescription)")
+                self.logger.insertLog(.authError(method: "AuthViewController.didAuthenticateWithCode", error: error))
                 self.showAuthErrorAlert()
             }
             UIBlockingProgressHUD.dismiss()
@@ -36,9 +36,8 @@ extension AuthViewController: WebViewViewControllerDelegate {
 
 extension AuthViewController {
     func showAuthErrorAlert() {
-        let alertController = UIAlertController(title: AuthErrorAlertConstants.title, message: AuthErrorAlertConstants.message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
+        let alert = Alert.simpleAlert(title: AuthErrorAlertConstants.title, message: AuthErrorAlertConstants.message, style: .alert, completion: nil)
+        
+        present(alert.controller, animated: true, completion: nil)
     }
 }

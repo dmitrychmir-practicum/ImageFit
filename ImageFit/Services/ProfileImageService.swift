@@ -36,7 +36,7 @@ final class ProfileImageService: BaseService {
                 
                 NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": self.avatarURL ?? ""])
                 case .failure(let error):
-                self.logger.insertLog(ErrorMessages.requestError(method: "ProfileImageService.fetchProfileImageURL", error: error).description)
+                self.logger.insertLog(.requestError(method: "ProfileImageService.fetchProfileImageURL", error: error))
                 
                 completion(.failure(error))
             }

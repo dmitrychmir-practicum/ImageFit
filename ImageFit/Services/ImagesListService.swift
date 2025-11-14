@@ -39,7 +39,7 @@ final class ImagesListService: BaseService {
                 completion(.success(photosLoaded))
                 NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self, userInfo: ["Images": photosLoaded])
             case .failure(let error):
-                self.logger.insertLog(ErrorMessages.requestError(method: "ImagesListService.fetchPhotosNextPage", error: error).description)
+                self.logger.insertLog(.requestError(method: "ImagesListService.fetchPhotosNextPage", error: error))
                 
                 completion(.failure(error))
             }
@@ -70,7 +70,7 @@ final class ImagesListService: BaseService {
                 }
                 completion(.success(()))
             case .failure(let error):
-                self.logger.insertLog(ErrorMessages.requestError(method: "ImagesListService.changeLike", error: error).description)
+                self.logger.insertLog(.requestError(method: "ImagesListService.changeLike", error: error))
                 
                 completion(.failure(error))
             }

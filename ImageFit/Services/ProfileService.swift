@@ -32,7 +32,7 @@ final class ProfileService: BaseService {
                     self?.profile = profile
                     completion(.success(profile))
                 case .failure(let error):
-                    self?.logger.insertLog("[ProfileService.fetchProfile]: Ошибка запроса: \(error.localizedDescription)")
+                    self?.logger.insertLog(.requestError(method: "ProfileService.fetchProfile", error: error))
                     completion(.failure(error))
                 }
             }

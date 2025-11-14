@@ -60,9 +60,18 @@ enum AuthErrorAlertConstants {
     static let message = "Не удалось войти в систему"
 }
 
+enum AnyErrorAlertConstants {
+    static let title = "Ошибка"
+    static let message = "Что-то пошло не так. Попробовать ещё раз?"
+}
+
 enum ErrorMessages {
     case requestError(method: String, error: Error)
     case urlError(method: String)
+    case authError(method: String, error: Error)
+    case changeLikeStatusError(method: String, error: Error)
+    case loadSingleImageError(method: String, error: Error)
+    case decodeError(method: String, error: Error, content: String)
     
     var description: String {
         switch self {
@@ -70,6 +79,18 @@ enum ErrorMessages {
             return "[\(method)]: Ошибка запроса: \(error.localizedDescription)"
         case .urlError(let method):
             return "[\(method)]: Ошибка: не удалось создать URL"
+        case .authError(let method, let error):
+            return "[\(method)]: Ошибка при аутентификации: \(error.localizedDescription)"
+        case .changeLikeStatusError(let method, let error):
+            return "[\(method)]: Ошибка: не удалось сменить статус изображения: \(error.localizedDescription)"
+        case .loadSingleImageError(let method, let error):
+            return "[\(method)]: Ошибка: не удалось загрузить изображение: \(error.localizedDescription)"
+        case .decodeError(let method, let error, let content):
+            if let decodingError = error as? DecodingError {
+                return "[\(method)]: Ошибка декодирования: \(decodingError), Данные: \(content)"
+            } else {
+                return "[\(method)]: Ошибка декодирования: \(error.localizedDescription), Данные: \(content)"
+            }
         }
     }
 }
@@ -80,7 +101,7 @@ enum Alert {
     
     var controller: UIAlertController {
         switch self {
-        case .simpleAlert(let title, let message, let style, let completion):
+        case .simpleAlert(let title, let message, let style, _):
             let ac = UIAlertController(title: title, message: message, preferredStyle: style)
             let action = UIAlertAction(title: "OK", style: .default)
             ac.addAction(action)

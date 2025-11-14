@@ -38,7 +38,6 @@ final class ImagesListViewController: UIViewController {
             }
             
             UIBlockingProgressHUD.show()
-            //let photoModel = photos[indexPath.row]
             guard let urlStr = photos[indexPath.row].largeImageURL,
                   let url = URL(string: urlStr) else {
                 return
@@ -86,6 +85,7 @@ final class ImagesListViewController: UIViewController {
                 paths.append(IndexPath(row: i, section: 0))
             }
             tableView.insertRows(at: paths, with: .automatic)
+            UIBlockingProgressHUD.dismiss()
         }
     }
     
@@ -93,22 +93,21 @@ final class ImagesListViewController: UIViewController {
         let imageView = UIImageView()
         imageView.kf.setImage(with: url) { [weak self] result in
             UIBlockingProgressHUD.dismiss()
+            guard let self else {
+                return
+            }
+            
             switch result {
             case .success(let cachedImage):
                 vc.currentImage = cachedImage.image
             case .failure(let error):
-                self?.logger.insertLog("Ошибка: Не удалось загрузить изображение")
-                self?.showErrorLoadImageAlert(title: "Ошибка", message: "Не удалось загрузить изображение.", handler: { [weak self] in
-                    self?.prepareSingleImageViewController(for: vc, with: url)
-                })
+                self.logger.insertLog(.loadSingleImageError(method: "ImagesListViewController.prepareSingleImageViewController", error: error))
+                let alert = Alert.yesNoAlert(title: "Ошибка", message: "Не удалось загрузить изображение. Попробовать ещё раз?", style: .alert, completionYes: {
+                    UIBlockingProgressHUD.show()
+                    self.prepareSingleImageViewController(for: vc, with: url)
+                }, completionNo: { vc.dismiss(animated: true, completion: nil) })
+                vc.present(alert.controller, animated: true)
             }
         }
-    }
-    
-    func showErrorLoadImageAlert(title: String, message: String, handler: (() -> Void)?) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Повторить", style: .default) { _ in handler?() })
-        alertController.addAction(UIAlertAction(title: "Не надо", style: .cancel))
-        present(alertController, animated: true)
     }
 }

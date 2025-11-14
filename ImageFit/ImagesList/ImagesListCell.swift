@@ -34,7 +34,7 @@ final class ImagesListCell: UITableViewCell {
     }
     
     private func setDateLabel(_ date: Date?) {
-        dateLabel.text = date?.dateTimeString
+        dateLabel.text = date?.dateTimeString ?? ""
     }
     
     func setLikeButtonImage(_ isLiked: Bool) {

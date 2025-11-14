@@ -40,15 +40,11 @@ extension URLSession {
                     let decodedObject = try Decoder.json.decoder.decode(T.self, from: data)
                     completion(.success(decodedObject))
                 } catch {
-                    if let decodingError = error as? DecodingError {
-                        Logger.shared.insertLog("[URLSession.objectTask]: Ошибка декодирования: \(decodingError), Данные: \(String(data: data, encoding: .utf8) ?? "")")
-                    } else {
-                        Logger.shared.insertLog("[URLSession.objectTask]: Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
-                    }
+                    Logger.shared.insertLog(.decodeError(method: "URLSession.objectTask", error: error, content: String(data: data, encoding: .utf8) ?? ""))
                     completion(.failure(error))
                 }
             case .failure(let error):
-                Logger.shared.insertLog("[URLSession.objectTask]: Ошибка запроса: \(error.localizedDescription)")
+                Logger.shared.insertLog(.requestError(method: "URLSession.objectTask", error: error))
                 completion(.failure(error))
             }
         }
@@ -64,15 +60,11 @@ extension URLSession {
                     let decodedObject = try Decoder.json.decoder.decode([PhotoResult].self, from: data)
                     completion(.success(decodedObject))
                 } catch {
-                    if let decodingError = error as? DecodingError {
-                        Logger.shared.insertLog("[URLSession.objectTask]: Ошибка декодирования: \(decodingError), Данные: \(String(data: data, encoding: .utf8) ?? "")")
-                    } else {
-                        Logger.shared.insertLog("[URLSession.objectTask]: Ошибка декодирования: \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "")")
-                    }
+                    Logger.shared.insertLog(.decodeError(method: "URLSession.objectTask", error: error, content: String(data: data, encoding: .utf8) ?? ""))
                     completion(.failure(error))
                 }
             case .failure(let error):
-                Logger.shared.insertLog("[URLSession.objectTask]: Ошибка запроса: \(error.localizedDescription)")
+                Logger.shared.insertLog(.requestError(method: "URLSession.objectTask", error: error))
                 completion(.failure(error))
             }
         }
@@ -87,7 +79,7 @@ extension URLSession {
             case .success:
                 completion(.success(()))
             case .failure(let error):
-                Logger.shared.insertLog("[URLSession.objectTask]: Ошибка запроса: \(error.localizedDescription)")
+                Logger.shared.insertLog(.requestError(method: "URLSession.objectTask", error: error))
                 completion(.failure(error))
             }
         }

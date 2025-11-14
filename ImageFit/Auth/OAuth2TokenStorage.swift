@@ -8,7 +8,7 @@
 import Foundation
 import SwiftKeychainWrapper
 
-final class OAuth2TokenStorage: RemoveDataDelegate {
+final class OAuth2TokenStorage {
     private let logger = Logger.shared
     private let tokenKey = "unsplashUserToken"
     
@@ -23,7 +23,9 @@ final class OAuth2TokenStorage: RemoveDataDelegate {
             }
         }
     }
-    
+}
+
+extension OAuth2TokenStorage: RemoveDataDelegate {
     func removeCurrentData() {
         let isRemoved = KeychainWrapper.standard.removeObject(forKey: tokenKey)
         

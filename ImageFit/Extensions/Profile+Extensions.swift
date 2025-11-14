@@ -13,7 +13,8 @@ extension ProfileResult {
             username: username,
             fullName: "\(firstName) \(lastName)".trimmingCharacters(in: .whitespaces),
             loginName: "@\(username)",
-            bio: bio)
+            bio: bio
+        )
         return model
     }
 }
