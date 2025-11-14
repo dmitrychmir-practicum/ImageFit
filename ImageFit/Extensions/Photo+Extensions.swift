@@ -10,7 +10,15 @@ import UIKit
 
 extension PhotoResult {
     func toModel() -> PhotoModel {
-        return PhotoModel(id: self.id, size: CGSize(width: self.width, height: self.height), createdAt: self.createdAt, welcomeDescription: self.description, thumbImageURL: self.urls?.thumb, largeImageURL: self.urls?.full, isLiked: false)
+        let createdAt: Date? = {
+            guard let dateString = self.createdAt else { return nil }
+            let dateFormater = DateFormatter()
+            dateFormater.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            return dateFormater.date(from: dateString)
+        }()
+        
+        
+        return PhotoModel(id: self.id, size: CGSize(width: self.width, height: self.height), createdAt: createdAt, welcomeDescription: self.description, thumbImageURL: self.urls?.thumb, largeImageURL: self.urls?.full, isLiked: self.likedByUser)
     }
 }
 

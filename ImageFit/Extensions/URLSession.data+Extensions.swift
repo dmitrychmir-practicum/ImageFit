@@ -36,6 +36,7 @@ extension URLSession {
     
     func objectTask<T: Decodable>(for request: URLRequest, completion: @escaping (Result<T, Error>) -> Void) -> URLSessionTask {
         URLSession.decoder.keyDecodingStrategy = .convertFromSnakeCase
+        //URLSession.decoder.dateDecodingStrategy = .iso8601
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
@@ -61,6 +62,7 @@ extension URLSession {
     
     func objectTask(for request: URLRequest, completion: @escaping (Result<[PhotoResult], Error>) -> Void) -> URLSessionTask {
         URLSession.decoder.keyDecodingStrategy = .convertFromSnakeCase
+        //URLSession.decoder.dateDecodingStrategy = .iso8601
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
@@ -75,6 +77,21 @@ extension URLSession {
                     }
                     completion(.failure(error))
                 }
+            case .failure(let error):
+                Logger.shared.insertLog("[URLSession.objectTask]: Ошибка запроса: \(error.localizedDescription)")
+                completion(.failure(error))
+            }
+        }
+        
+        return task
+    }
+    
+    func requestTask(for request: URLRequest, completion: @escaping (Result<Void, Error>) -> Void) -> URLSessionTask {
+        //TODO: Проверить возможность избавиться от Data
+        let task = data(for: request) { (result: Result<Data, Error>) in
+            switch result {
+            case .success:
+                completion(.success(()))
             case .failure(let error):
                 Logger.shared.insertLog("[URLSession.objectTask]: Ошибка запроса: \(error.localizedDescription)")
                 completion(.failure(error))

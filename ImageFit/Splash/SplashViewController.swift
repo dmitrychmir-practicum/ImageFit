@@ -9,8 +9,9 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     let showAuthViewIdentifier = "showAuthView"
-    let profileService = ProfileService.shared
     let storage = OAuth2TokenStorage()
+    let profileService = ProfileService.shared
+    let imagesListService = ImagesListService.shared
     let logger = Logger.shared
 
     override func viewDidAppear(_ animated: Bool) {

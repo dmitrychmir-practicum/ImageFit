@@ -44,6 +44,17 @@ enum ImagesDownloaderConstants {
     }
 }
 
+enum ImageLikeUrl {
+    case like(photoId: String)
+    
+    var url: String {
+        switch self {
+        case .like(photoId: let id):
+            return "https://api.unsplash.com/photos/\(id)/like"
+        }
+    }
+}
+
 enum AuthErrorAlertConstants {
     static let title = "Что-то пошло не так"
     static let message = "Не удалось войти в систему"
@@ -59,6 +70,34 @@ enum ErrorMessages {
             return "[\(method)]: Ошибка запроса: \(error.localizedDescription)"
         case .urlError(let method):
             return "[\(method)]: Ошибка: не удалось создать URL"
+        }
+    }
+}
+
+enum Alert {
+    case simpleAlert(title: String, message: String, style: UIAlertController.Style, completion: (() -> Void)? = nil)
+    case yesNoAlert(title: String, message: String, style: UIAlertController.Style, completionYes: (() -> Void)? = nil, completionNo: (() -> Void)? = nil)
+    
+    var controller: UIAlertController {
+        switch self {
+        case .simpleAlert(let title, let message, let style, let completion):
+            let ac = UIAlertController(title: title, message: message, preferredStyle: style)
+            let action = UIAlertAction(title: "OK", style: .default)
+            ac.addAction(action)
+            return ac
+        case .yesNoAlert(let title, let message, let style, let completionYes, let completionNo):
+            let ac = UIAlertController(title: title, message: message, preferredStyle: style)
+            let actionYes = UIAlertAction(title: "Да", style: .default) { _ in
+                guard let completionYes else { return }
+                completionYes()
+            }
+            let actionNo = UIAlertAction(title: "Нет", style: .cancel) { _ in
+                guard let completionNo else { return }
+                completionNo()
+            }
+            ac.addAction(actionYes)
+            ac.addAction(actionNo)
+            return ac
         }
     }
 }

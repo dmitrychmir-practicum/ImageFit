@@ -59,3 +59,9 @@ final class ProfileImageService: BaseService {
         return request
     }
 }
+
+extension ProfileImageService: RemoveDataDelegate {
+    func removeCurrentData() {
+        avatarURL = nil
+    }
+}

@@ -25,6 +25,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             switch result {
             case .success:
                 self?.switchToTabBarController()
+                self?.imagesListService.fetchPhotosNextPage { _ in }
             case .failure(let error):
                 self?.logger.insertLog("[SplashViewController.fetchProfile]: Ошибка запроса: \(error.localizedDescription)")
                 break

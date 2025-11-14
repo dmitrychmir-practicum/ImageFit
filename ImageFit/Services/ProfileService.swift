@@ -55,3 +55,9 @@ final class ProfileService: BaseService {
         return request
     }
 }
+
+extension ProfileService: RemoveDataDelegate {
+    func removeCurrentData() {
+        self.profile = nil
+    }
+}

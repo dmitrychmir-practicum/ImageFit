@@ -10,7 +10,7 @@ import UIKit
 extension ImagesListViewController:  UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photosName.count
+        return photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -24,14 +24,6 @@ extension ImagesListViewController:  UITableViewDataSource {
         
         return imagesListCell
     }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // TODO: тут запросим следующую страницу
-        if indexPath.row + 1 == imagesListService.photos.count {
-            imagesListService.fetchPhotosNextPage() { result in
-            }
-        }
-    }
 }
 
 extension ImagesListViewController: UITableViewDelegate {
@@ -40,15 +32,53 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return 0
+        if let currentCellHeight = heightOfCells[indexPath] {
+            return currentCellHeight
         }
         
-        let insets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        let photoModel = photos[indexPath.row]
         let width = tableView.bounds.width - insets.left - insets.right
-        let scale = width / image.size.width
-        let height = image.size.height * scale + image.capInsets.top + image.capInsets.bottom
+        let scale = width / CGFloat(photoModel.size.width)
+        let height = CGFloat(photoModel.size.height) * scale + insets.top + insets.bottom
+        
+        heightOfCells[indexPath] = height
         
         return height
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == photos.count {
+            imagesListService.fetchPhotosNextPage() { _ in }
+        }
+    }
+}
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func didTapLike(_ cell: ImagesListCell) {
+        guard let index = tableView.indexPath(for: cell) else {
+            return
+        }
+        let photoModel = photos[index.row]
+        changeLike(photoModel: photoModel, cell: cell, indexRow: index.row)
+    }
+    
+    private func changeLike(photoModel: PhotoModel, cell: ImagesListCell, indexRow: Int) {
+        UIBlockingProgressHUD.show()
+        imagesListService.changeLike(photoId: photoModel.id, isLike: photoModel.isLiked) { [weak self] result in
+            guard let self else { return }
+            UIBlockingProgressHUD.dismiss()
+            
+            switch result {
+            case .success:
+                self.photos[indexRow].isLiked = !self.photos[indexRow].isLiked
+                cell.setLikeButtonImage(self.photos[indexRow].isLiked)
+                
+            case .failure(let error):
+                self.logger.insertLog("Не удалось сменить статус изображения: \(error)")
+                self.showErrorLoadImageAlert(title: "Ошибка", message: "Что-то пошло не так. Попробовать ещё раз?", handler: { [weak self] in
+                    self?.changeLike(photoModel: photoModel, cell: cell, indexRow: indexRow)
+                })
+            }
+        }
     }
 }
