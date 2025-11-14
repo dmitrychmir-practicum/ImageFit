@@ -101,3 +101,16 @@ enum Alert {
         }
     }
 }
+
+enum Decoder {
+    case json
+    
+    private static let jsDecoder = JSONDecoder()
+    
+    var decoder: JSONDecoder {
+        Decoder.jsDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        Decoder.jsDecoder.dateDecodingStrategy = .iso8601
+        
+        return Decoder.jsDecoder
+    }
+}

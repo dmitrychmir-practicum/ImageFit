@@ -8,8 +8,6 @@
 import UIKit
 
 extension URLSession {
-    private static let decoder = JSONDecoder()
-    
     func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> URLSessionTask {
         let fulfillCompletionOnTheMainThread: (Result<Data, Error>) -> Void = { result in
             DispatchQueue.main.async {
@@ -35,13 +33,11 @@ extension URLSession {
     }
     
     func objectTask<T: Decodable>(for request: URLRequest, completion: @escaping (Result<T, Error>) -> Void) -> URLSessionTask {
-        URLSession.decoder.keyDecodingStrategy = .convertFromSnakeCase
-        //URLSession.decoder.dateDecodingStrategy = .iso8601
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
                 do {
-                    let decodedObject = try URLSession.decoder.decode(T.self, from: data)
+                    let decodedObject = try Decoder.json.decoder.decode(T.self, from: data)
                     completion(.success(decodedObject))
                 } catch {
                     if let decodingError = error as? DecodingError {
@@ -61,13 +57,11 @@ extension URLSession {
     }
     
     func objectTask(for request: URLRequest, completion: @escaping (Result<[PhotoResult], Error>) -> Void) -> URLSessionTask {
-        URLSession.decoder.keyDecodingStrategy = .convertFromSnakeCase
-        //URLSession.decoder.dateDecodingStrategy = .iso8601
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
                 do {
-                    let decodedObject = try URLSession.decoder.decode([PhotoResult].self, from: data)
+                    let decodedObject = try Decoder.json.decoder.decode([PhotoResult].self, from: data)
                     completion(.success(decodedObject))
                 } catch {
                     if let decodingError = error as? DecodingError {
