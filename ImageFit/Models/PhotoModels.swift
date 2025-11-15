@@ -17,7 +17,7 @@ struct PhotoModel {
     let isLiked: Bool
     
     func setLikeStatus(_ isLike: Bool) -> PhotoModel {
-        let newPhoto = PhotoModel(id: self.id, size: self.size, createdAt: self.createdAt, welcomeDescription: self.welcomeDescription, thumbImageURL: self.thumbImageURL, largeImageURL: self.largeImageURL, isLiked: isLike)
+        let newPhoto = PhotoModel(id: id, size: size, createdAt: createdAt, welcomeDescription: welcomeDescription, thumbImageURL: thumbImageURL, largeImageURL: largeImageURL, isLiked: isLike)
         return newPhoto
     }
 }
