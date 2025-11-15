@@ -7,9 +7,10 @@
 
 import UIKit
 
-extension ImagesListViewController:  UITableViewDataSource{
+extension ImagesListViewController:  UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photosName.count
+        return photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -25,21 +26,62 @@ extension ImagesListViewController:  UITableViewDataSource{
     }
 }
 
-extension ImagesListViewController: UITableViewDelegate{
+extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: segueIdentifier, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return 0
+        if let currentCellHeight = heightOfCells[indexPath] {
+            return currentCellHeight
         }
         
-        let insets = UIEdgeInsets(top: 4, left: 16, bottom: 4, right: 16)
+        let photoModel = photos[indexPath.row]
         let width = tableView.bounds.width - insets.left - insets.right
-        let scale = width / image.size.width
-        let height = image.size.height * scale + image.capInsets.top + image.capInsets.bottom
+        let scale = width / CGFloat(photoModel.size.width)
+        let height = CGFloat(photoModel.size.height) * scale + insets.top + insets.bottom
+        
+        heightOfCells[indexPath] = height
         
         return height
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == photos.count {
+            UIBlockingProgressHUD.show()
+            imagesListService.fetchPhotosNextPage() { _ in }
+        }
+    }
+}
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func didTapLike(_ cell: ImagesListCell) {
+        guard let index = tableView.indexPath(for: cell) else {
+            return
+        }
+        let photoModel = photos[index.row]
+        changeLike(photoModel: photoModel, cell: cell, indexRow: index.row)
+    }
+    
+    private func changeLike(photoModel: PhotoModel, cell: ImagesListCell, indexRow: Int) {
+        UIBlockingProgressHUD.show()
+        imagesListService.changeLike(photoId: photoModel.id, isLike: photoModel.isLiked) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self else { return }
+            
+            switch result {
+            case .success:
+                var photo = self.photos[indexRow]
+                photo = photo.setLikeStatus(!self.photos[indexRow].isLiked)
+                self.photos[indexRow] = photo
+                cell.setLikeButtonImage(self.photos[indexRow].isLiked)
+            case .failure(let error):
+                self.logger.insertLog(.changeLikeStatusError(method: "ImagesListViewController.changeLike", error: error))
+                let alert = Alert.yesNoAlert(title: AnyErrorAlertConstants.title, message: AnyErrorAlertConstants.message, style: .alert, completionYes: {
+                    self.changeLike(photoModel: photoModel, cell: cell, indexRow: indexRow)
+                }, completionNo: nil)
+                present(alert.controller, animated: true)
+            }
+        }
     }
 }

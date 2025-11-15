@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24127" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24412" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24405"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -57,6 +57,9 @@
                                                     </constraints>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="Active"/>
+                                                    <connections>
+                                                        <action selector="likeButtonTapped:" destination="pBZ-dz-rY4" eventType="touchUpInside" id="Asi-Pu-AXa"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -79,7 +82,7 @@
                                         <accessibility key="accessibilityConfiguration" identifier="ImagesListCell"/>
                                         <connections>
                                             <outlet property="cellImage" destination="31M-PS-pyM" id="fPF-uQ-JmE"/>
-                                            <outlet property="dataLabel" destination="hW4-4D-xYD" id="dGS-Y7-Zkc"/>
+                                            <outlet property="dateLabel" destination="hW4-4D-xYD" id="p9e-2h-0jL"/>
                                             <outlet property="effectView" destination="TQo-Jp-uIx" id="vZw-re-uhD"/>
                                             <outlet property="likeButton" destination="pxq-XW-8dW" id="Kpa-Wg-Kbb"/>
                                         </connections>
@@ -103,7 +106,7 @@
                     <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="zn5-Im-Ucg"/>
                     <navigationItem key="navigationItem" id="fS0-RH-jFR"/>
                     <connections>
-                        <outlet property="tableWiew" destination="hS6-zQ-XSb" id="lBQ-YU-O1y"/>
+                        <outlet property="tableView" destination="hS6-zQ-XSb" id="eLY-tL-QsH"/>
                         <segue destination="2K1-2S-SNv" kind="presentation" identifier="ShowSingleImage" id="ARd-1e-S0o"/>
                     </connections>
                 </viewController>
@@ -142,7 +145,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pHw-JS-cr8">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" image="11" translatesAutoresizingMaskIntoConstraints="NO" id="ake-iK-ix4">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" image="stub" translatesAutoresizingMaskIntoConstraints="NO" id="ake-iK-ix4">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
@@ -313,11 +316,11 @@
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
-        <image name="11" width="853" height="1280"/>
         <image name="Active" width="44" height="44"/>
         <image name="AuthIcon" width="60" height="60"/>
         <image name="BackwardButton" width="24" height="24"/>
         <image name="ShareButton" width="50.333332061767578" height="50"/>
+        <image name="stub" width="83" height="75"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

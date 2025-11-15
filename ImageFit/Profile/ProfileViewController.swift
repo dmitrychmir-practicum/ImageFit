@@ -17,6 +17,7 @@ final class ProfileViewController: UIViewController {
     private var helloWorldLabel: UILabel!
     private var logoutButton: UIButton!
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let profileLogoutService = ProfileLogoutService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +46,9 @@ final class ProfileViewController: UIViewController {
         avatarImage = UIImage(named: imageName)
         avatarImageView = UIImageView(image: avatarImage)
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        avatarImageView.layer.cornerRadius = 35
+        avatarImageView.layer.masksToBounds = true
+        
         view.addSubview(avatarImageView)
         
         NSLayoutConstraint.activate([
@@ -147,6 +151,14 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func didTapLogoutButton() {
+        let alert = Alert.yesNoAlert(title: "Выход.", message: "Вы действительно хотите выйти?", style: .alert, completionYes: {
+            self.profileLogoutService.logout()
+            let splashController = SplashViewController()
+            let window = UIApplication.shared.windows.first
+            window?.rootViewController = splashController
+            window?.makeKeyAndVisible()
+        }, completionNo: nil)
         
+        present(alert.controller, animated: true)
     }
 }

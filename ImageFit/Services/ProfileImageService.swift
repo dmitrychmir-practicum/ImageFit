@@ -25,7 +25,7 @@ final class ProfileImageService: BaseService {
             return
         }
         
-        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self else { return }
             switch result {
             case .success(let result):
@@ -36,7 +36,8 @@ final class ProfileImageService: BaseService {
                 
                 NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL": self.avatarURL ?? ""])
                 case .failure(let error):
-                self.logger.insertLog("[ProfileImageService.fetchProfileImageURL]: Ошибка запроса: \(error.localizedDescription)")
+                self.logger.insertLog(.requestError(method: "ProfileImageService.fetchProfileImageURL", error: error))
+                
                 completion(.failure(error))
             }
         }
@@ -56,5 +57,11 @@ final class ProfileImageService: BaseService {
         request.httpMethod = HTTPMethod.get.rawValue
         
         return request
+    }
+}
+
+extension ProfileImageService: RemoveDataDelegate {
+    func removeCurrentData() {
+        avatarURL = nil
     }
 }

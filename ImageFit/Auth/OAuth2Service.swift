@@ -38,7 +38,7 @@ final class OAuth2Service : BaseService {
                     self.storage.token = authToken
                     completion(.success(authToken))
                 case .failure(let error):
-                    self.logger.insertLog(ErrorMessages.requestError(method: "OAuth2Service.fetchAuthToken", error: error).description)
+                    self.logger.insertLog(.requestError(method: "OAuth2Service.fetchAuthToken", error: error))
                     completion(.failure(error))
                 }
                 self.task = nil
@@ -52,7 +52,7 @@ final class OAuth2Service : BaseService {
     
     private func createOAuthTokenRequest(withCode code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
-            logger.insertLog(ErrorMessages.urlError(method: "OAuth2Service.createOAuthTokenRequest").description)
+            logger.insertLog(.urlError(method: "OAuth2Service.createOAuthTokenRequest"))
             
             return nil
         }
