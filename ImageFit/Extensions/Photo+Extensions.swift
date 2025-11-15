@@ -10,25 +10,26 @@ import UIKit
 
 extension PhotoResult {
     func toModel() -> PhotoModel {
-        return PhotoModel(id: self.id,
-                          size: CGSize(width: self.width, height: self.height),
-                          createdAt: self.createdAt,
-                          welcomeDescription: self.description,
-                          thumbImageURL: self.urls?.thumb,
-                          largeImageURL: self.urls?.full,
-                          isLiked: self.likedByUser
+        PhotoModel(id: id,
+            size: CGSize(width: width, height: height),
+            createdAt: createdAt,
+            welcomeDescription: description,
+            thumbImageURL: urls?.thumb,
+            largeImageURL: urls?.full,
+            isLiked: likedByUser
         )
     }
 }
 
 extension [PhotoResult] {
     func toModels() -> [PhotoModel] {
-        var result = [PhotoModel]()
-        for item in self {
-            let model = item.toModel()
-            result.append(model)
-        }
-        
-        return result
+//        var result = [PhotoModel]()
+//        for item in self {
+//            let model = item.toModel()
+//            result.append(model)
+//        }
+//        
+//        return result
+        map { $0.toModel() }
     }
 }

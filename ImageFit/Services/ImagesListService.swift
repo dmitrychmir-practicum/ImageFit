@@ -65,7 +65,7 @@ final class ImagesListService: BaseService {
             case .success:
                 if let photoIndex = self.photos.firstIndex(where: { $0.id == photoId }) {
                     var photo = self.photos[photoIndex]
-                    photo.isLiked = !isLike
+                    photo = photo.setLikeStatus(!isLike)
                     self.photos[photoIndex] = photo
                 }
                 completion(.success(()))

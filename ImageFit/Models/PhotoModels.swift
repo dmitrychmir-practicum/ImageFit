@@ -14,7 +14,12 @@ struct PhotoModel {
     let welcomeDescription: String?
     let thumbImageURL: String?
     let largeImageURL: String?
-    var isLiked: Bool
+    let isLiked: Bool
+    
+    func setLikeStatus(_ isLike: Bool) -> PhotoModel {
+        let newPhoto = PhotoModel(id: self.id, size: self.size, createdAt: self.createdAt, welcomeDescription: self.welcomeDescription, thumbImageURL: self.thumbImageURL, largeImageURL: self.largeImageURL, isLiked: isLike)
+        return newPhoto
+    }
 }
 
 struct PhotoResult: Decodable {

@@ -66,12 +66,14 @@ extension ImagesListViewController: ImagesListCellDelegate {
     private func changeLike(photoModel: PhotoModel, cell: ImagesListCell, indexRow: Int) {
         UIBlockingProgressHUD.show()
         imagesListService.changeLike(photoId: photoModel.id, isLike: photoModel.isLiked) { [weak self] result in
-            guard let self else { return }
             UIBlockingProgressHUD.dismiss()
+            guard let self else { return }
             
             switch result {
             case .success:
-                self.photos[indexRow].isLiked = !self.photos[indexRow].isLiked
+                var photo = self.photos[indexRow]
+                photo = photo.setLikeStatus(!self.photos[indexRow].isLiked)
+                self.photos[indexRow] = photo
                 cell.setLikeButtonImage(self.photos[indexRow].isLiked)
             case .failure(let error):
                 self.logger.insertLog(.changeLikeStatusError(method: "ImagesListViewController.changeLike", error: error))

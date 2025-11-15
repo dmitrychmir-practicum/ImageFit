@@ -29,10 +29,6 @@ extension OAuth2TokenStorage: RemoveDataDelegate {
     func removeCurrentData() {
         let isRemoved = KeychainWrapper.standard.removeObject(forKey: tokenKey)
         
-        if isRemoved {
-            logger.insertLog("Токен пользователя очищен.")
-        } else {
-            logger.insertLog("Не удалось удалить токен пользователя.")
-        }
+        logger.insertLog(isRemoved ? "Токен пользователя очищен.": "Не удалось удалить токен пользователя.")
     }
 }

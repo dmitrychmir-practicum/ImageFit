@@ -32,12 +32,32 @@ extension URLSession {
         return task
     }
     
+    func objectTask(for request: URLRequest, completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) -> URLSessionTask {
+        let task = data(for: request) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                do {
+                    let decodedObject = try Decoder.jsonDataWithSeconds.decoder.decode(OAuthTokenResponseBody.self, from: data)
+                    completion(.success(decodedObject))
+                } catch {
+                    Logger.shared.insertLog(.decodeError(method: "URLSession.objectTask", error: error, content: String(data: data, encoding: .utf8) ?? ""))
+                    completion(.failure(error))
+                }
+            case .failure(let error):
+                Logger.shared.insertLog(.requestError(method: "URLSession.objectTask", error: error))
+                completion(.failure(error))
+            }
+        }
+        
+        return task
+    }
+    
     func objectTask<T: Decodable>(for request: URLRequest, completion: @escaping (Result<T, Error>) -> Void) -> URLSessionTask {
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
                 do {
-                    let decodedObject = try Decoder.json.decoder.decode(T.self, from: data)
+                    let decodedObject = try Decoder.jsonDataWithIso8601.decoder.decode(T.self, from: data)
                     completion(.success(decodedObject))
                 } catch {
                     Logger.shared.insertLog(.decodeError(method: "URLSession.objectTask", error: error, content: String(data: data, encoding: .utf8) ?? ""))
@@ -57,7 +77,7 @@ extension URLSession {
             switch result {
             case .success(let data):
                 do {
-                    let decodedObject = try Decoder.json.decoder.decode([PhotoResult].self, from: data)
+                    let decodedObject = try Decoder.jsonDataWithIso8601.decoder.decode([PhotoResult].self, from: data)
                     completion(.success(decodedObject))
                 } catch {
                     Logger.shared.insertLog(.decodeError(method: "URLSession.objectTask", error: error, content: String(data: data, encoding: .utf8) ?? ""))

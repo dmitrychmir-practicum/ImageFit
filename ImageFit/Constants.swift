@@ -26,9 +26,9 @@ enum UnsplashProfileURL {
     var url: String {
         switch self {
         case .me:
-            return "https://api.unsplash.com/me"
+            "https://api.unsplash.com/me"
         case .user(let username):
-            return "https://api.unsplash.com/users/\(username)"
+            "https://api.unsplash.com/users/\(username)"
         }
     }
 }
@@ -39,7 +39,7 @@ enum ImagesDownloaderConstants {
     var url: String {
         switch self {
             case .page(page: let page, pageSize: let pageSize):
-            return "https://api.unsplash.com/photos?page=\(page)&per_page=\(pageSize)"
+                "https://api.unsplash.com/photos?page=\(page)&per_page=\(pageSize)"
         }
     }
 }
@@ -50,7 +50,7 @@ enum ImageLikeUrl {
     var url: String {
         switch self {
         case .like(photoId: let id):
-            return "https://api.unsplash.com/photos/\(id)/like"
+            "https://api.unsplash.com/photos/\(id)/like"
         }
     }
 }
@@ -116,22 +116,31 @@ enum Alert {
                 guard let completionNo else { return }
                 completionNo()
             }
+            
             ac.addAction(actionYes)
             ac.addAction(actionNo)
+
             return ac
         }
     }
 }
 
 enum Decoder {
-    case json
+    case jsonDataWithIso8601
+    case jsonDataWithSeconds
     
     private static let jsDecoder = JSONDecoder()
     
     var decoder: JSONDecoder {
         Decoder.jsDecoder.keyDecodingStrategy = .convertFromSnakeCase
-        Decoder.jsDecoder.dateDecodingStrategy = .iso8601
         
+        switch self {
+        case .jsonDataWithIso8601:
+            Decoder.jsDecoder.dateDecodingStrategy = .iso8601
+        case .jsonDataWithSeconds:
+            Decoder.jsDecoder.dateDecodingStrategy = .secondsSince1970
+        }
+
         return Decoder.jsDecoder
     }
 }
