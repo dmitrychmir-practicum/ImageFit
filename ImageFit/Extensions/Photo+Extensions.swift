@@ -23,13 +23,6 @@ extension PhotoResult {
 
 extension [PhotoResult] {
     func toModels() -> [PhotoModel] {
-//        var result = [PhotoModel]()
-//        for item in self {
-//            let model = item.toModel()
-//            result.append(model)
-//        }
-//        
-//        return result
         map { $0.toModel() }
     }
 }
